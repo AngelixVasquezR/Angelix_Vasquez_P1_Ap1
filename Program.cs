@@ -1,10 +1,18 @@
 using Angelix_Vasquez_P1_Ap1.Components;
+using Angelix_Vasquez_P1_Ap1.DAL;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
+
+var ConStr = builder.Configuration.GetConnectionString("ConStr");
+
+builder.Services.AddDbContextFactory<Contexto>(o => o.UseSqlServer(ConStr));
+
+
 
 var app = builder.Build();
 
