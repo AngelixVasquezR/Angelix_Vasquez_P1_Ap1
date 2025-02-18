@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
@@ -11,16 +12,19 @@ namespace Angelix_Vasquez_P1_Ap1.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Modelo",
+                name: "Aportes",
                 columns: table => new
                 {
-                    ModeloId = table.Column<int>(type: "int", nullable: false)
+                    AporteId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Nombre = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Persona = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Fecha = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Monto = table.Column<int>(type: "int", nullable: false),
+                    Observacion = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Modelo", x => x.ModeloId);
+                    table.PrimaryKey("PK_Aportes", x => x.AporteId);
                 });
         }
 
@@ -28,7 +32,7 @@ namespace Angelix_Vasquez_P1_Ap1.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Modelo");
+                name: "Aportes");
         }
     }
 }

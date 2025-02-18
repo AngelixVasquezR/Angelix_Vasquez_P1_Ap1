@@ -1,0 +1,61 @@
+﻿@page "/Aporte/Destails{AporteId:Int}"
+@inject AportesService AportesService
+@inject NavigationManager NavigationManager
+@rendermode InteractiveServer
+
+<PageTitle>Ver Aportes</PageTitle>
+
+@if (Aportes != null)
+{
+    <div class="container">
+        <div class="card shadow-header">
+            <div class="card-header bg-danger text-white text-center py-2 rounded">
+                <h3 class="text-center"><strong>Eliminar Técnico</strong></h3>
+            </div>
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="card-body">
+                            <p>¿Estás seguro que deseas eliminar al siguiente técnico?</p>
+                            <ul class="list-unstyled">
+                                <li><strong>ld:</strong> @Aportes.AporteId</li>
+                                <li><strong>Persona:</strong> @Aportes.Persona</li>
+                                <li><strong>Fecha:</strong> @Aportes.Fecha</li>
+                                <li><strong>Monto</strong> @Aportes.Monto</li>
+
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer d-flex justify-content-between">
+                <button type="button" class="btn btn-outline-primary" @onclick="Volver"><i class="bi bi-box-arrow-left"></i> Volver</button>
+
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <p>No se encuentra.</p>
+}
+
+@code {
+    [Parameter]
+    public int AporteId { get; set; }
+    public Aportes Aportes { get; set; } = new Aportes();
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (AporteId > 0)
+        {
+            Aportes = await AportesService.Buscar(AporteId);
+        }
+    }
+
+    public void Volver()
+    {
+        NavigationManager.NavigateTo("/Aporte/Index");
+    }
+    
+}

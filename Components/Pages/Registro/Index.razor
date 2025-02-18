@@ -1,5 +1,111 @@
-﻿<h3>Index</h3>
+﻿@page "/Aporte/Index"
+@inject AportesService RegistroService
+@rendermode InteractiveServer
+@inject NavigationManager navigation
+
+<PageTitle>Listado de Aportes</PageTitle>
+
+<div class="card shadow-lg">
+    <div class="card-header text-center titulo-fondo-azul-borde-negro">
+        <h3><strong>Aportes</strong></h3>
+    </div>
+
+    <div class="card-body">
+        <div class="row mb-3 align-items-end">
+            <div class="col-md-3">
+                <label for="Filtro" class="form-label">Filtrar por:</label>
+                <select @bind="filtro" class="form-select">
+                    <option value="id">ID</option>
+                    <option value="personas">Personas</option>
+                    <option value="monto">Monto</option>
+
+                </select>
+            </div>
+
+            <div class="col-md-6">
+                <label for="ValorFiltro" class="form-label">Búsqueda:</label>
+                <div class="input-group">
+                    <input @bind="valorFiltro" class="form-control" placeholder="Buscar" />
+                    <button @onclick="Buscar" class="btn btn-outline-primary" type="button">
+                        <span class="bi bi-search"></span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="col-md-1 text-end">
+                <a href="/Aporte/Create" class="btn btn-success" type="button">
+                    <span class="bi bi-plus-lg"></span> Crear
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <table class="table table-bordered text-center mt-4">
+        <thead class="bg-primary text-white">
+            <tr>
+                <th>Id</th>
+                <th>Persona</th>
+                <th>Monto</th>
+                <th>Ver</th>
+                
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var registro in ListaRegistros)
+            {
+                <tr>
+                    <td>@registro.AporteId</td>
+                    <td>@registro.Persona</td>
+                    <td>@registro.Monto</td>
+                    <td>
+                        <a class="btn btn-outline-warning" href="/Registro/Edit/@registro.AporteId">
+                            <span class="bi bi-pencil-square"></span>
+                        </a>
+                    </td>
+                    <td>
+                        <a class="btn btn-outline-danger" href="/Registro/Destails/@registro.AporteId">
+                            <span class="bi bi-trash"></span>
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+
 
 @code {
+    public Aportes Registros = new Aportes();
+    public List<Aportes> ListaRegistros = new List<Aportes>();
+    private string filtro = "id";
+    private string valorFiltro = "";
 
+    protected override async Task OnInitializedAsync()
+    {
+        ListaRegistros = await RegistroService.Listar(c => true);
+    }
+
+    private async Task Buscar()
+    {
+        if (!string.IsNullOrWhiteSpace(valorFiltro))
+        {
+            if (filtro == "id" && int.TryParse(valorFiltro, out int RegistroId))
+            {
+
+                ListaRegistros = await RegistroService.Listar(p => p.AporteId == RegistroId);
+            }
+            else if (filtro == "nombres")
+            {
+
+                ListaRegistros = await RegistroService.Listar(p => p.Persona.Contains(valorFiltro));
+            }
+
+        }
+        else
+        {
+
+            ListaRegistros = await RegistroService.Listar(p => true);
+        }
+    }
 }

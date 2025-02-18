@@ -1,5 +1,6 @@
 using Angelix_Vasquez_P1_Ap1.Components;
 using Angelix_Vasquez_P1_Ap1.DAL;
+using Angelix_Vasquez_P1_Ap1.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,7 +13,7 @@ var ConStr = builder.Configuration.GetConnectionString("ConStr");
 
 builder.Services.AddDbContextFactory<Contexto>(o => o.UseSqlServer(ConStr));
 
-
+builder.Services.AddScoped<AportesService>();
 
 var app = builder.Build();
 
